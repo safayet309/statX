@@ -15,10 +15,10 @@
   4. Upload both to GitHub Pages and make the QR code from that link.
 -->
 <style>
-:root{--navy:#1f3864;--blue:#2f5597;--sky:#4f8bd6;--light:#b4c7e7;--pale:#eef3fb;--ink:#1b2430;--green:#2e9e5b}
+:root{--navy:#1f3864;--blue:#2f5597;--sky:#4f8bd6;--light:#b4c7e7;--pale:#eef3fb;--ink:#1b2430;--green:#2e9e5b;--off:#f8f6f1}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fff;line-height:1.6}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--off);line-height:1.6}
 h1,h2,h3{font-family:"Arial Black",Arial,sans-serif;font-weight:900;line-height:1.2}
 #bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#4f8bd6,#2e9e5b);z-index:30}
 nav{position:fixed;top:4px;left:0;right:0;z-index:20;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px;background:rgba(31,56,100,.92)}
@@ -36,7 +36,7 @@ nav a:hover{background:var(--sky)}
 .down{margin-top:36px;display:inline-block;animation:bob 1.6s ease-in-out infinite;font-size:30px;color:#fff;text-decoration:none}
 @keyframes bob{50%{transform:translateY(10px)}}
 section{padding:90px 20px}
-section:nth-of-type(even){background:var(--pale)}
+section{background:var(--off)}
 .wrap{max-width:1100px;margin:0 auto}
 h2{color:var(--navy);font-size:clamp(24px,3.5vw,36px);text-align:center;margin-bottom:12px}
 h2::after{content:"";display:block;width:70px;height:5px;margin:12px auto 0;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--green))}
@@ -89,13 +89,33 @@ tr.best td{background:#dff3e6;font-weight:bold}
 footer{background:var(--navy);color:#cfd9ee;text-align:center;padding:34px 20px;font-size:14px}
 #lb{position:fixed;inset:0;background:rgba(10,20,40,.9);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:20px}
 #lb img{max-width:100%;max-height:100%;background:#fff;border-radius:8px}
+.brand{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font:900 18px "Arial Black",Arial,sans-serif;padding:0;margin-right:14px}
+.brand svg{width:32px;height:32px}
+nav a.brand:hover{background:none}
+#splash{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:radial-gradient(circle at 50% 40%,#2f5597,#14284b 70%);color:#fff;text-align:center;padding:20px;transition:opacity .9s ease,visibility .9s}
+#splash.hide{opacity:0;visibility:hidden}
+#splash svg{width:150px;height:150px;overflow:visible}
+.drop{transform-origin:50% 60%;animation:pop .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes pop{from{transform:scale(0);opacity:0}}
+.trend{stroke-dasharray:90;stroke-dashoffset:90;animation:dr 1.2s .6s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.dt{opacity:0;animation:fd .4s 1.7s forwards}
+@keyframes fd{to{opacity:1}}
+.wv{animation:wv 1.6s ease-in-out infinite alternate}
+@keyframes wv{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
+#splash .sn{font:900 40px "Arial Black",Arial,sans-serif;letter-spacing:2px;opacity:0;animation:up .8s 1s ease forwards}
+#splash .ss{font-size:15px;max-width:320px;opacity:0;animation:up .8s 1.3s ease forwards}
+@keyframes up{from{transform:translateY(16px)}to{opacity:.92;transform:none}}
+@media(prefers-reduced-motion:reduce){#splash{display:none}}
 @media(max-width:640px){.row{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.bar i{transition:none}.down,.sup .ph{animation:none}}
 </style>
 </head>
 <body>
 <div id="bar"></div>
+<div id="splash"><div id="splashLogo"></div><div class="sn">StatX</div><div class="ss">Waterborne Disease Forecasting in Bangladesh</div></div>
 <nav>
+  <a class="brand" href="#home"><span id="navLogo"></span>StatX</a>
   <a href="#home">Home</a><a href="#supervisor">Supervisor</a><a href="#team">Team</a><a href="#method">Method</a>
   <a href="#results">Results</a><a href="#graphs">Graphs</a><a href="#work">Project Work</a><a href="#data">Data and Code</a>
 </nav>
@@ -203,6 +223,9 @@ const LINKS = [["Dataset", "Excel file", "#"], ["Python Code", "Jupyter notebook
 /* =================================================================== */
 
 const $ = id => document.getElementById(id);
+const logo = id => '<svg viewBox="0 0 100 100"><defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f8bd6"/><stop offset="1" stop-color="#2e9e5b"/></linearGradient></defs><g class="drop"><path d="M50 4C50 4 18 42 18 64a32 32 0 0 0 64 0C82 42 50 4 50 4Z" fill="url(#g' + id + ')" stroke="#fff" stroke-width="3"/><path class="wv" d="M30 78q7-6 14 0t14 0t14 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round"/><polyline class="trend" points="32,66 44,56 56,62 70,42" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle class="dt" cx="70" cy="42" r="5" fill="#fff"/></g></svg>';
+$("splashLogo").innerHTML = logo("s");
+$("navLogo").innerHTML = logo("n");
 const EXT = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"];   // fallback if no .webp file exists
 function nx(im) { const i = +im.dataset.i + 1; if (i < EXT.length) { im.dataset.i = i; im.src = im.dataset.b + "." + EXT[i]; } else im.remove(); }
 const ph = (img, label) => {
@@ -238,7 +261,8 @@ const io = new IntersectionObserver(es => es.forEach(e => {
   if (n) count(n);
   io.unobserve(e.target);
 }), {threshold: .15});
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+const wait = matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 2800;
+setTimeout(() => { $("splash").classList.add("hide"); document.querySelectorAll(".reveal").forEach(el => io.observe(el)); }, wait);
 
 function count(el) {
   const to = +el.dataset.n, t0 = performance.now();
