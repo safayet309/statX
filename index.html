@@ -6,9 +6,9 @@
 <title>Waterborne Disease Forecasting in Bangladesh</title>
 <!--
   HOW TO USE
-  1. Put this file and a folder named "images" side by side.
-  2. Put your pictures inside "images" with these exact names:
-     supervisor.jpg, team1.jpg ... team8.jpg, work1.jpg ... work6.jpg
+  1. Put this file and a folder named "image" side by side.
+  2. Put your pictures inside "image" with these exact names:
+     supervisor.jpg, team1.jpg ... team14.jpg, work1.jpg ... work6.jpg
      Figure_1_distribution.png, Figure_2_correlation.png, Figure_3_model_fit.png,
      Figure_4_incidence_rate_ratio.png, Figure_5_observed_vs_predicted.png, Figure_1_Maps_Standalone.png
   3. Change names, links and text inside the CONFIG part of the script at the bottom.
@@ -172,8 +172,15 @@ footer{background:var(--navy);color:#cfd9ee;text-align:center;padding:34px 20px;
 
 <script>
 /* ============ CONFIG: change names, links and text here ============ */
-const SUPERVISOR = {name: "[Supervisor name]", role: "[Designation], Department of Statistics", img: "images/supervisor.jpg"};
-const TEAM = Array.from({length: 8}, (_, i) => ({name: "Team Member " + (i + 1), role: "Student, Department of Statistics", img: "images/team" + (i + 1) + ".jpg"}));
+const IMG = "image/";   // folder name on GitHub (change to "images/" if your folder is called images)
+const SUPERVISOR = {name: "Dr. Md. Siddikur Rahman", role: "Head of Department, Department of Statistics", img: IMG + "supervisor.jpg"};
+const NAMES = [
+  "Md Safayet Hossan", "Md Sariful Islam", "Tahmina Yeasmin", "Mst Rifa Sunjida",
+  "Md Taius Nur Rafat", "Mst Shahanaj Parvin", "Sanjida Afrose", "Mst Sumaiya Islam",
+  "Mst Samia Siddike", "Mst Rafia Razzak Joty", "Abu Nowshad Mohammad Naim", "Ayesha Siddika Mim",
+  "Team Member 13", "Team Member 14"
+];
+const TEAM = NAMES.map((n, i) => ({name: n, role: "Student, Department of Statistics", img: IMG + "team" + (i + 1) + ".jpg"}));
 const STEPS = [
   ["Data collection", "64 districts of Bangladesh, 2017–2020: disease cases and seven climate variables."],
   ["Preprocessing", "Missing values checked; multicollinearity removed using the Variance Inflation Factor."],
@@ -211,9 +218,9 @@ $("bars").innerHTML = MODELS.map((m, i) => {
   return '<div class="row' + (m[2] ? " best" : "") + '"><div>' + m[0] + (m[2] ? " (best)" : "") + '</div><div class="bar"><i style="--w:' + w.toFixed(0) + "%;--d:" + (i * .2).toFixed(1) + 's">' + m[1].toLocaleString("en-US") + "</i></div></div>";
 }).join("");
 $("gal").innerHTML = FIGS.map((f, i) =>
-  '<figure class="reveal zoom" style="' + delay(i % 2, .2) + '">' + ph("images/" + f[0], f[0]) + '<figcaption class="cap"><b>' + f[1] + "</b> " + f[2] + "</figcaption></figure>").join("");
+  '<figure class="reveal zoom" style="' + delay(i % 2, .2) + '">' + ph(IMG + f[0], f[0]) + '<figcaption class="cap"><b>' + f[1] + "</b> " + f[2] + "</figcaption></figure>").join("");
 $("workGrid").innerHTML = Array.from({length: WORK}, (_, i) =>
-  '<div class="reveal zoom" style="' + delay(i % 3, .15) + '">' + ph("images/work" + (i + 1) + ".jpg", "Project photo " + (i + 1)) + "</div>").join("");
+  '<div class="reveal zoom" style="' + delay(i % 3, .15) + '">' + ph(IMG + "work" + (i + 1) + ".jpg", "Project photo " + (i + 1)) + "</div>").join("");
 $("links").innerHTML = LINKS.map((l, i) =>
   '<a class="reveal zoom" style="' + delay(i, .15) + '" href="' + l[2] + '" target="_blank" rel="noopener">' + l[0] + "<small>" + l[1] + "</small></a>").join("");
 
