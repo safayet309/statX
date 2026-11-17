@@ -75,6 +75,12 @@ th{background:var(--blue);color:#fff;padding:12px;text-align:center}
 td{padding:11px;text-align:center;border-top:1px solid #e3e9f4}
 td:first-child{text-align:left;font-weight:bold;background:var(--pale)}
 tr.best td{background:#dff3e6;font-weight:bold}
+.t2 th{background:#0f2a4a;font-size:14px}
+.t2 td:first-child{background:none;font-weight:normal;text-align:center}
+.t2 tr.hl td{background:#fdf0c4;font-weight:bold}
+.t2 tr.hl td:first-child{background:#fdf0c4;font-weight:bold}
+.t2 td{padding:12px 11px}
+.tw.t2w{margin-top:44px}
 .cap{margin-top:10px;font-size:14px;color:#33415a;text-align:center}
 .gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:28px}
 .gal figure .ph{height:260px;border-radius:14px;cursor:zoom-in}
@@ -167,6 +173,19 @@ nav a.brand:hover{background:none}
     </table>
   </div>
   <p class="cap reveal"><b>Table 1.</b> Model comparison. The green row is the best-fitting model.</p>
+  <div class="tw t2w reveal">
+    <table class="t2">
+      <tr><th>Climatic Variable</th><th>VIF</th><th>Pearson (r)</th><th>NB-GLM IRR</th><th>p-value</th></tr>
+      <tr class="hl"><td>Mean Temp (°C)</td><td>1.76</td><td>+0.303</td><td>1.575**</td><td>0.000</td></tr>
+      <tr><td>Humidity (%)</td><td>2.99</td><td>-0.135</td><td>0.959</td><td>0.060</td></tr>
+      <tr><td>Max Temp (°C)</td><td>2.96</td><td>-0.027</td><td>0.949</td><td>0.055</td></tr>
+      <tr class="hl"><td>Min Temp (°C)</td><td>2.95</td><td>+0.236</td><td>1.085*</td><td>0.028</td></tr>
+      <tr><td>Precipitation (mm)</td><td>4.57</td><td>+0.125</td><td>1.000</td><td>0.185</td></tr>
+      <tr><td>Max Wind (m/s)</td><td>1.54</td><td>-0.020</td><td>0.992</td><td>0.586</td></tr>
+      <tr><td>Min Wind (m/s)</td><td>1.11</td><td>+0.110</td><td>1.729</td><td>0.736</td></tr>
+    </table>
+  </div>
+  <p class="cap reveal"><b>Table 2.</b> Multicollinearity (VIF) and Negative Binomial regression results. Highlighted rows are the significant climatic variables.</p>
 </div></section>
 
 <section id="graphs"><div class="wrap">
