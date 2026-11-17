@@ -177,8 +177,8 @@ const SUPERVISOR = {name: "Dr. Md. Siddikur Rahman", role: "Head of Department, 
 const NAMES = [
   "Md Safayet Hossan", "Md Sariful Islam", "Tahmina Yeasmin", "Mst Rifa Sunjida",
   "Md Taius Nur Rafat", "Mst Shahanaj Parvin", "Sanjida Afrose", "Mst Sumaiya Islam",
-  "Mst Samia Siddike", "Mst Rafia Razzak", "Abu Nowshad Mohammad Naim", "Ayesha Siddika Mim",
-  "Jannatul Mawa Joty", "Arifa Akter"
+  "Mst Samia Siddike", "Mst Rafia Razzak Joty", "Abu Nowshad Mohammad Naim", "Ayesha Siddika Mim",
+  "Team Member 13", "Team Member 14"
 ];
 const TEAM = NAMES.map((n, i) => ({name: n, role: "Student, Department of Statistics", img: IMG + "team" + (i + 1) + ".jpg"}));
 const STEPS = [
@@ -203,9 +203,12 @@ const LINKS = [["Dataset", "Excel file", "#"], ["Python Code", "Jupyter notebook
 /* =================================================================== */
 
 const $ = id => document.getElementById(id);
-const EXT = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"];   // photo works with any of these extensions
+const EXT = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"];   // fallback if no .webp file exists
 function nx(im) { const i = +im.dataset.i + 1; if (i < EXT.length) { im.dataset.i = i; im.src = im.dataset.b + "." + EXT[i]; } else im.remove(); }
-const ph = (img, label) => '<div class="ph" data-label="' + label + '"><img src="' + img + '" data-b="' + img.replace(/\.[A-Za-z]+$/, "") + '" data-i="-1" alt="" onerror="nx(this)"></div>';
+const ph = (img, label) => {
+  const b = img.replace(/\.[A-Za-z]+$/, "");
+  return '<div class="ph" data-label="' + label + '"><img src="' + b + '.webp" data-b="' + b + '" data-i="-1" loading="lazy" decoding="async" alt="" onerror="nx(this)"></div>';
+};
 let d = 0;
 const delay = (i, step) => "--d:" + (i * step).toFixed(2) + "s";
 
