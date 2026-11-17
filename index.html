@@ -82,7 +82,7 @@ tr.best td{background:#dff3e6;font-weight:bold}
 .work{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .work .ph{height:200px;border-radius:14px;transition:transform .4s}
 .work .ph:hover{transform:scale(1.05) rotate(-1deg)}
-.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:20px}
 .links a{display:block;text-align:center;text-decoration:none;color:#fff;font-weight:bold;padding:26px 14px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--sky));transition:transform .3s}
 .links a:hover{transform:translateY(-6px) scale(1.03)}
 .links small{display:block;font-weight:normal;opacity:.85;margin-top:4px}
@@ -223,7 +223,8 @@ const LINKS = [
   ["Dataset", "Excel file", "data/Infectious_Disease_Data.xlsx"],
   ["Python Code", "Jupyter notebook", "https://github.com/safayet309/statX/blob/main/code/Waterborne_Disease_Forecasting.ipynb"],
   ["Analysis and Results", "Tables and figures", "https://github.com/safayet309/statX/tree/main/results"],
-  ["Shapefile", "District map data", "https://github.com/safayet309/statX/tree/main/shapefile"]
+  ["Shapefile", "District map data", "https://github.com/safayet309/statX/tree/main/shapefile"],
+  ["PDF Files", "Reports and papers", "https://github.com/safayet309/statX/tree/main/pdf"]
 ];
 /* =================================================================== */
 
@@ -255,7 +256,7 @@ $("gal").innerHTML = FIGS.map((f, i) =>
 $("workGrid").innerHTML = Array.from({length: WORK}, (_, i) =>
   '<div class="reveal zoom" style="' + delay(i % 3, .15) + '">' + ph(IMG + "work" + (i + 1) + ".jpg", "Project photo " + (i + 1)) + "</div>").join("");
 $("links").innerHTML = LINKS.map((l, i) =>
-  '<a class="reveal zoom" style="' + delay(i, .15) + '"  href="' + l[2] + '"' + (l[2].endsWith(".xlsx") ? ' download' : ' target="_blank" rel="noopener"') + '>' + l[0] + "<small>" + l[1] + "</small></a>").join("");
+  '<a class="reveal zoom" style="' + delay(i, .15) + '" href="' + l[2] + '"' + (l[2].endsWith(".xlsx") ? ' download' : ' target="_blank" rel="noopener"') + '>' + l[0] + "<small>" + l[1] + "</small></a>").join("");
 
 /* scroll reveal: items appear one after another */
 const io = new IntersectionObserver(es => es.forEach(e => {
