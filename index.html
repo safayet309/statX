@@ -6,8 +6,8 @@
 <title>Waterborne Disease Forecasting in Bangladesh</title>
 <!--
   HOW TO USE
-  1. Put this file and a folder named "image" side by side.
-  2. Put your pictures inside "image" with these exact names:
+  1. Put this file and a folder named "images" side by side.
+  2. Put your pictures inside "images" with these exact names:
      supervisor.jpg, team1.jpg ... team14.jpg, work1.jpg ... work6.jpg
      Figure_1_distribution.png, Figure_2_correlation.png, Figure_3_model_fit.png,
      Figure_4_incidence_rate_ratio.png, Figure_5_observed_vs_predicted.png, Figure_1_Maps_Standalone.png
@@ -172,7 +172,7 @@ footer{background:var(--navy);color:#cfd9ee;text-align:center;padding:34px 20px;
 
 <script>
 /* ============ CONFIG: change names, links and text here ============ */
-const IMG = "image/";   // folder name on GitHub (change to "images/" if your folder is called images)
+const IMG = "images/";   // folder name on GitHub
 const SUPERVISOR = {name: "Dr. Md. Siddikur Rahman", role: "Head of Department, Department of Statistics", img: IMG + "supervisor.jpg"};
 const NAMES = [
   "Md Safayet Hossan", "Md Sariful Islam", "Tahmina Yeasmin", "Mst Rifa Sunjida",
@@ -203,7 +203,9 @@ const LINKS = [["Dataset", "Excel file", "#"], ["Python Code", "Jupyter notebook
 /* =================================================================== */
 
 const $ = id => document.getElementById(id);
-const ph = (img, label) => '<div class="ph" data-label="' + label + '"><img src="' + img + '" alt="" onerror="this.remove()"></div>';
+const EXT = ["jpg", "jpeg", "png", "JPG", "JPEG", "PNG"];   // photo works with any of these extensions
+function nx(im) { const i = +im.dataset.i + 1; if (i < EXT.length) { im.dataset.i = i; im.src = im.dataset.b + "." + EXT[i]; } else im.remove(); }
+const ph = (img, label) => '<div class="ph" data-label="' + label + '"><img src="' + img + '" data-b="' + img.replace(/\.[A-Za-z]+$/, "") + '" data-i="-1" alt="" onerror="nx(this)"></div>';
 let d = 0;
 const delay = (i, step) => "--d:" + (i * step).toFixed(2) + "s";
 
