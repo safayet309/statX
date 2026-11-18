@@ -92,6 +92,21 @@ tr.best td{background:#dff3e6;font-weight:bold}
 .links a{display:block;text-align:center;text-decoration:none;color:#fff;font-weight:bold;padding:26px 14px;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--sky));transition:transform .3s}
 .links a:hover{transform:translateY(-6px) scale(1.03)}
 .links small{display:block;font-weight:normal;opacity:.85;margin-top:4px}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px}
+.fcard{background:#fff;border-radius:16px;padding:24px 20px;text-align:center;box-shadow:0 6px 22px rgba(31,56,100,.12);border-top:5px solid var(--sky);transition:transform .35s}
+.fcard:hover{transform:translateY(-6px)}
+.fcard b{display:block;font:900 34px "Arial Black",Arial,sans-serif;color:var(--blue);margin-bottom:6px}
+.fcard span{font-size:14px;color:#4a5668;display:block}
+.ftop{max-width:820px;margin:34px auto 0;background:#fff;border-radius:14px;padding:20px 24px;box-shadow:0 6px 22px rgba(31,56,100,.12);font-size:15px;color:#33415a;text-align:center}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:26px}
+.box{background:#fff;border-radius:16px;padding:26px 24px;box-shadow:0 6px 22px rgba(31,56,100,.12)}
+.box h3{color:var(--navy);font-size:20px;margin-bottom:14px}
+.box ol,.box ul{padding-left:22px;font-size:15px;color:#33415a}
+.box li{margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.chip{background:#fff;border-radius:30px;padding:12px 22px;font-weight:bold;color:var(--navy);box-shadow:0 4px 16px rgba(31,56,100,.12);border:2px solid var(--light)}
+.chip small{display:block;font-weight:normal;font-size:12px;color:#5a6779}
+.ack{max-width:760px;margin:0 auto;text-align:center;font-size:16px;color:#33415a;background:#fff;border-radius:16px;padding:30px 26px;box-shadow:0 6px 22px rgba(31,56,100,.12)}
 footer{background:var(--navy);color:#cfd9ee;text-align:center;padding:34px 20px;font-size:14px}
 #lb{position:fixed;inset:0;background:rgba(10,20,40,.9);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:20px}
 #lb img{max-width:100%;max-height:100%;background:#fff;border-radius:8px}
@@ -123,7 +138,7 @@ nav a.brand:hover{background:none}
 <nav>
   <a class="brand" href="#home"><span id="navLogo"></span>StatX</a>
   <a href="#home">Home</a><a href="#supervisor">Supervisor</a><a href="#team">Team</a><a href="#method">Method</a>
-  <a href="#results">Results</a><a href="#graphs">Graphs</a><a href="#work">Project Work</a><a href="#data">Data and Code</a>
+  <a href="#results">Results</a><a href="#graphs">Graphs</a><a href="#findings">Findings</a><a href="#conclusion">Conclusion</a><a href="#tools">Tools</a><a href="#guidelines">Guidelines</a><a href="#data">Data and Code</a>
 </nav>
 
 <header class="hero" id="home">
@@ -143,7 +158,7 @@ nav a.brand:hover{background:none}
 </header>
 
 <section id="supervisor"><div class="wrap">
-  <h2 class="reveal">Under the Guidance of</h2>
+  <h2 class="reveal">Our Supervisor</h2>
   <div class="sup reveal zoom" id="sup"></div>
 </div></section>
 
@@ -194,16 +209,85 @@ nav a.brand:hover{background:none}
   <div class="gal" id="gal"></div>
 </div></section>
 
-<section id="work"><div class="wrap">
-  <h2 class="reveal">Project Work</h2>
-  <p class="sub reveal">Moments from our work on the project.</p>
-  <div class="work" id="workGrid"></div>
+<section id="findings"><div class="wrap">
+  <h2 class="reveal">Key Findings</h2>
+  <p class="sub reveal">The most important results of the study, 2017–2020.</p>
+  <div class="fgrid">
+    <div class="fcard reveal zoom"><b>1,472,554</b><span>waterborne disease cases recorded across 64 districts</span></div>
+    <div class="fcard reveal zoom" style="--d:.15s"><b>92.11%</b><span>of all cases were diarrhoea, followed by cholera (5.00%) and typhoid (2.61%)</span></div>
+    <div class="fcard reveal zoom" style="--d:.3s"><b>34.4%</b><span>of all cases came in 2019 alone (506,433 cases), the sharpest peak</span></div>
+    <div class="fcard reveal zoom"><b>1.575</b><span>Incidence Rate Ratio for mean temperature (p &lt; 0.001)</span></div>
+    <div class="fcard reveal zoom" style="--d:.15s"><b>1.085</b><span>Incidence Rate Ratio for minimum temperature (p = 0.028)</span></div>
+    <div class="fcard reveal zoom" style="--d:.3s"><b>3,960</b><span>variance-to-mean ratio, so the data were severely overdispersed</span></div>
+  </div>
+  <div class="ftop reveal"><b>Highest-burden districts:</b> Chittagong (93,261), Cox’s Bazar (69,138) and Cumilla (65,442). Standard Poisson regression failed because of overdispersion, while Negative Binomial based models fitted far better.</div>
+</div></section>
+
+<section id="conclusion"><div class="wrap">
+  <h2 class="reveal">Conclusion and Limitations</h2>
+  <p class="sub reveal">What we learned, what we recommend, and where the study has limits.</p>
+  <div class="two">
+    <div class="box reveal left">
+      <h3>Conclusion and Recommendations</h3>
+      <ol>
+        <li>Dispersion-adjusted count models are the reliable way to model severely overdispersed district-level disease counts.</li>
+        <li>Mean and minimum temperature are clear climatic signals of higher waterborne disease risk.</li>
+        <li>Coastal and south-eastern districts such as Chittagong, Cox’s Bazar and Cumilla need priority safe-water and sanitation (WASH) investment.</li>
+        <li>Temperature-based early warning and pre-monsoon forecasting should support targeted surveillance and resource planning.</li>
+      </ol>
+    </div>
+    <div class="box reveal zoom" style="--d:.2s">
+      <h3>Limitations and Future Work</h3>
+      <ul>
+        <li>The data cover only four years (2017–2020) at district level, so individual-level risks cannot be studied.</li>
+        <li>Only seven climate variables were used; socio-economic and WASH indicators could improve the models.</li>
+        <li>Reporting changes during the 2020 pandemic may have affected case counts.</li>
+        <li>Future work: longer time series, more explanatory variables and spatial models for finer forecasts.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="tools"><div class="wrap">
+  <h2 class="reveal">Tools Used</h2>
+  <p class="sub reveal">The software and data sources behind this project.</p>
+  <div class="chips">
+    <div class="chip reveal zoom">Python<small>analysis and modelling</small></div>
+    <div class="chip reveal zoom" style="--d:.12s">Jupyter Notebook<small>code and results</small></div>
+    <div class="chip reveal zoom" style="--d:.24s">Microsoft Excel<small>dataset</small></div>
+    <div class="chip reveal zoom" style="--d:.36s">Shapefile maps<small>district-level mapping</small></div>
+    <div class="chip reveal zoom" style="--d:.48s">GitHub Pages<small>this website</small></div>
+  </div>
+</div></section>
+
+<section id="guidelines"><div class="wrap">
+  <h2 class="reveal">Poster Guidelines</h2>
+  <p class="sub reveal">Instructions given by our teacher for preparing the project poster.</p>
+  <div class="box reveal zoom" style="max-width:900px;margin:0 auto">
+    <ol>
+      <li>Number the objectives as 1, 2, 3, etc. The data source should also be clearly mentioned in the abstract.</li>
+      <li>Increase the font size within all figures to at least 25 pt to ensure readability.</li>
+      <li>Include in-text citations throughout the main body using Mendeley or Zotero reference management software.</li>
+      <li>Increase the total number of references to provide adequate academic support for the study.</li>
+      <li>Adjust the title and author name font sizes using an appropriate 60:50 font-size ratio, respectively.</li>
+      <li>Use “Figure 1.” and “Table 1.” instead of colons. Make these labels bold, but do not format them as separate captions or titles.</li>
+      <li>Maintain consistent typography throughout the poster. Use the same font style throughout and avoid italics.</li>
+      <li>Use Arial Black for headers and Arial for body text.</li>
+      <li>Reduce the reference font size below 20 pt if necessary to accommodate all references while maintaining readability.</li>
+      <li>Make sure the QR code works properly and gives access to the supplementary materials: dataset, Python/R codes, data analysis and results, and shapefiles.</li>
+    </ol>
+  </div>
 </div></section>
 
 <section id="data"><div class="wrap">
   <h2 class="reveal">Data and Code</h2>
   <p class="sub reveal">Everything needed to repeat our analysis.</p>
   <div class="links" id="links"></div>
+</div></section>
+
+<section id="ack"><div class="wrap">
+  <h2 class="reveal">Acknowledgement</h2>
+  <div class="ack reveal zoom">We are grateful to our teacher, Dr. Md. Siddikur Rahman, Head of the Department of Statistics, Begum Rokeya University, Rangpur, for his guidance throughout this project. We also thank the Department of Statistics for its support, and the data providers (DGHS, BBS and NASA POWER) whose data made this study possible.</div>
 </div></section>
 
 <footer>Department of Statistics, Begum Rokeya University, Rangpur-5400, Bangladesh</footer>
@@ -237,7 +321,6 @@ const FIGS = [
   ["Figure_5_observed_vs_predicted.png", "Figure 5.", "Comparison of Model Fit and Dispersion."],
   ["Figure_1_Maps_Standalone.png", "Figure 6.", "Observed vs. Predicted Waterborne Disease Cases."]
 ];
-const WORK = 6;
 const LINKS = [
   ["Dataset", "Excel file", "data/Infectious_Disease_Data.xlsx"],
   ["Python Code", "Jupyter notebook", "https://github.com/safayet309/statX/blob/main/code/Waterborne_Disease_Forecasting.ipynb"],
@@ -272,8 +355,6 @@ $("bars").innerHTML = MODELS.map((m, i) => {
 }).join("");
 $("gal").innerHTML = FIGS.map((f, i) =>
   '<figure class="reveal zoom" style="' + delay(i % 2, .2) + '">' + ph(IMG + f[0], f[0]) + '<figcaption class="cap"><b>' + f[1] + "</b> " + f[2] + "</figcaption></figure>").join("");
-$("workGrid").innerHTML = Array.from({length: WORK}, (_, i) =>
-  '<div class="reveal zoom" style="' + delay(i % 3, .15) + '">' + ph(IMG + "work" + (i + 1) + ".jpg", "Project photo " + (i + 1)) + "</div>").join("");
 $("links").innerHTML = LINKS.map((l, i) =>
   '<a class="reveal zoom" style="' + delay(i, .15) + '" href="' + l[2] + '"' + (l[2].endsWith(".xlsx") ? ' download' : ' target="_blank" rel="noopener"') + '>' + l[0] + "<small>" + l[1] + "</small></a>").join("");
 
