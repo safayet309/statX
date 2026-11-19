@@ -31,6 +31,10 @@ main{padding:100px 20px 60px;min-height:100vh}
 .wrap{max-width:1100px;margin:0 auto}
 h2{color:var(--navy);font-size:clamp(24px,3.5vw,36px);text-align:center;margin-bottom:12px}
 .sub{text-align:center;max-width:720px;margin:14px auto 36px;color:#4a5668}
+.grp{margin-bottom:54px}
+.gh{text-align:center;margin-bottom:22px}
+.gh .gd{display:inline-block;background:var(--pale);color:var(--blue);font-weight:bold;font-size:14px;padding:5px 16px;border-radius:20px;border:1px solid var(--light)}
+.gh h3{color:var(--navy);font-size:clamp(20px,3vw,28px);margin-top:10px}
 .pgal{column-width:250px;column-gap:14px}
 .pgal a{display:block;margin:0 0 14px;break-inside:avoid;border-radius:12px;overflow:hidden;background:#e4ebf7;box-shadow:0 6px 22px rgba(31,56,100,.12);cursor:zoom-in;transition:transform .3s}
 .pgal a:hover{transform:scale(1.02)}
@@ -50,7 +54,7 @@ h2{color:var(--navy);font-size:clamp(24px,3.5vw,36px);text-align:center;margin-b
   <h2>Gallery</h2>
   <p class="sub">Moments from our presentation day. Click any photo to enlarge it.</p>
   <div id="pmsg">Loading photos...</div>
-  <div class="pgal" id="pgal"></div>
+  <div id="groups"></div>
   <div style="text-align:center"><a class="back" href="index.html">&larr; Back to Home</a></div>
 </div></main>
 
@@ -69,29 +73,49 @@ const $ = id => document.getElementById(id);
 const logo = id => '<svg viewBox="0 0 100 100"><defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f8bd6"/><stop offset="1" stop-color="#2e9e5b"/></linearGradient></defs><g class="drop"><path d="M50 4C50 4 18 42 18 64a32 32 0 0 0 64 0C82 42 50 4 50 4Z" fill="url(#g' + id + ')" stroke="#fff" stroke-width="3"/><path class="wv" d="M30 78q7-6 14 0t14 0t14 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round"/><polyline class="trend" points="32,66 44,56 56,62 70,42" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle class="dt" cx="70" cy="42" r="5" fill="#fff"/></g></svg>';
 $("navLogo").innerHTML = logo("n");
 
+const IMGRE = /\.(webp|jpe?g|png|gif|avif)$/i;
+async function sbList(prefix) {
+  let all = [], offset = 0;
+  for (;;) {
+    const r = await fetch(SB_URL + "/storage/v1/object/list/" + SB_BUCKET, {
+      method: "POST",
+      headers: {"Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY},
+      body: JSON.stringify({prefix: prefix, limit: 100, offset: offset, sortBy: {column: "name", order: "asc"}})
+    });
+    if (!r.ok) throw new Error(r.status);
+    const part = await r.json();
+    all = all.concat(part);
+    if (part.length < 100) break;
+    offset += 100;
+  }
+  return all;
+}
+const pub = (folder, name) => SB_URL + "/storage/v1/object/public/" + SB_BUCKET + "/" + (folder ? encodeURIComponent(folder) + "/" : "") + encodeURIComponent(name);
+/* folder name: 2026-11-19_Final-Presentation  ->  date + title */
+function parseFolder(n) {
+  const m = n.match(/^(\d{4}-\d{2}-\d{2})[\s_-]*(.*)$/);
+  const clean = t => t.replace(/[_-]+/g, " ").trim();
+  if (!m) return {date: "", key: "", title: clean(n)};
+  const d = new Date(m[1] + "T00:00:00Z");
+  return {key: m[1], title: clean(m[2]), date: isNaN(d) ? m[1] : d.toLocaleDateString("en-GB", {day: "numeric", month: "long", year: "numeric", timeZone: "UTC"})};
+}
+const photos = (folder, list) => list.filter(f => f.id && IMGRE.test(f.name)).map(f => '<a href="' + pub(folder, f.name) + '"><img src="' + pub(folder, f.name) + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\')" onerror="this.parentNode.remove()"></a>').join("");
+
 async function loadGallery() {
-  const msg = $("pmsg"), box = $("pgal");
+  const msg = $("pmsg"), box = $("groups");
   try {
-    let all = [], offset = 0;
-    for (;;) {
-      const r = await fetch(SB_URL + "/storage/v1/object/list/" + SB_BUCKET, {
-        method: "POST",
-        headers: {"Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY},
-        body: JSON.stringify({prefix: "", limit: 100, offset: offset, sortBy: {column: "created_at", order: "asc"}})
-      });
-      if (!r.ok) throw new Error(r.status);
-      const part = await r.json();
-      all = all.concat(part);
-      if (part.length < 100) break;
-      offset += 100;
-    }
-    const files = all.filter(f => f.id && /\.(webp|jpe?g|png|gif|avif)$/i.test(f.name));
-    if (!files.length) { msg.textContent = "Photos will appear here soon."; return; }
+    const root = await sbList("");
+    const folders = root.filter(f => !f.id).map(f => f.name);
+    const loose = root.filter(f => f.id && IMGRE.test(f.name));
+    const groups = await Promise.all(folders.map(async n => ({n: n, info: parseFolder(n), html: photos(n, await sbList(n))})));
+    groups.sort((a, b) => (b.info.key || "").localeCompare(a.info.key || "") || a.n.localeCompare(b.n));
+    let out = groups.filter(g => g.html).map(g =>
+      '<section class="grp"><div class="gh">' + (g.info.date ? '<span class="gd">' + g.info.date + "</span>" : "") +
+      (g.info.title ? "<h3>" + g.info.title + "</h3>" : "") + '</div><div class="pgal">' + g.html + "</div></section>").join("");
+    if (loose.length) out += '<section class="grp"><div class="gh"><h3>More Photos</h3></div><div class="pgal">' + photos("", loose) + "</div></section>";
+    if (!out) { msg.textContent = "Photos will appear here soon."; return; }
     msg.style.display = "none";
-    box.innerHTML = files.map(f => {
-      const u = SB_URL + "/storage/v1/object/public/" + SB_BUCKET + "/" + encodeURIComponent(f.name);
-      return '<a href="' + u + '"><img src="' + u + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\')" onerror="this.parentNode.remove()"></a>';
-    }).join("");
+    box.innerHTML = out;
   } catch (e) {
     msg.textContent = "Could not load the gallery right now. Please try again later.";
   }
