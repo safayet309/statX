@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gallery | StatX</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#1f3864;--blue:#2f5597;--sky:#4f8bd6;--light:#b4c7e7;--pale:#eef3fb;--ink:#1b2430;--green:#2e9e5b;--off:#f8f6f1}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--off);line-height:1.6}
+h1,h2,h3{font-family:"Arial Black",Arial,sans-serif;font-weight:900;line-height:1.2}
+nav{position:fixed;top:4px;left:0;right:0;z-index:20;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px;background:rgba(31,56,100,.92)}
+nav a{color:#fff;text-decoration:none;font-size:14px;padding:6px 12px;border-radius:20px;transition:background .3s}
+nav a:hover{background:var(--sky)}
+.brand{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font:900 18px "Arial Black",Arial,sans-serif;padding:0;margin-right:14px}
+.brand svg{width:32px;height:32px}
+nav a.brand:hover{background:none}
+.drop{transform-origin:50% 60%;animation:pop .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes pop{from{transform:scale(0);opacity:0}}
+.trend{stroke-dasharray:90;stroke-dashoffset:90;animation:dr 1.2s .6s ease forwards}
+@keyframes dr{to{stroke-dashoffset:0}}
+.dt{opacity:0;animation:fd .4s 1.7s forwards}
+@keyframes fd{to{opacity:1}}
+.wv{animation:wv 1.6s ease-in-out infinite alternate}
+@keyframes wv{from{transform:translateX(-4px)}to{transform:translateX(4px)}}
+#lb{position:fixed;inset:0;background:rgba(10,20,40,.9);display:none;align-items:center;justify-content:center;z-index:50;cursor:zoom-out;padding:20px}
+#lb img{max-width:100%;max-height:100%;background:#fff;border-radius:8px}
+footer{background:var(--navy);color:#cfd9ee;text-align:center;padding:34px 20px;font-size:14px}
+main{padding:100px 20px 60px;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto}
+h2{color:var(--navy);font-size:clamp(24px,3.5vw,36px);text-align:center;margin-bottom:12px}
+.sub{text-align:center;max-width:720px;margin:14px auto 36px;color:#4a5668}
+.pgal{column-width:250px;column-gap:14px}
+.pgal a{display:block;margin:0 0 14px;break-inside:avoid;border-radius:12px;overflow:hidden;background:#e4ebf7;box-shadow:0 6px 22px rgba(31,56,100,.12);cursor:zoom-in;transition:transform .3s}
+.pgal a:hover{transform:scale(1.02)}
+.pgal img{display:block;width:100%;height:auto;min-height:120px;opacity:0;transition:opacity .5s}
+.pgal img.ok{opacity:1}
+#pmsg{text-align:center;color:#4a5668;font-size:15px;padding:20px}
+.back{display:inline-block;margin-top:34px;color:#fff;text-decoration:none;font-weight:bold;padding:12px 26px;border-radius:30px;background:linear-gradient(135deg,var(--blue),var(--sky))}
+</style>
+</head>
+<body>
+<nav>
+  <a class="brand" href="index.html"><span id="navLogo"></span>StatX</a>
+  <a href="index.html">Home</a><a href="gallery.html">Gallery</a>
+</nav>
+
+<main><div class="wrap">
+  <h2>Gallery</h2>
+  <p class="sub">Moments from our presentation day. Click any photo to enlarge it.</p>
+  <div id="pmsg">Loading photos...</div>
+  <div class="pgal" id="pgal"></div>
+  <div style="text-align:center"><a class="back" href="index.html">&larr; Back to Home</a></div>
+</div></main>
+
+<footer>
+  Department of Statistics, Begum Rokeya University, Rangpur-5400, Bangladesh<br>
+  <span style="font-size:12px;opacity:.8">&copy; 2026 Md Safayet Hossan</span>
+</footer>
+<div id="lb"><img alt=""></div>
+
+<script>
+const SB_URL = "https://kvnzbhuodrdctnqvdhln.supabase.co";
+const SB_KEY = "sb_publishable_nCGGz2ze6OA35HmqLpJrZQ_H7d-KMDX";   // publishable key: safe to keep in the website
+const SB_BUCKET = "gallery";                                        // Supabase Storage bucket name
+
+const $ = id => document.getElementById(id);
+const logo = id => '<svg viewBox="0 0 100 100"><defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f8bd6"/><stop offset="1" stop-color="#2e9e5b"/></linearGradient></defs><g class="drop"><path d="M50 4C50 4 18 42 18 64a32 32 0 0 0 64 0C82 42 50 4 50 4Z" fill="url(#g' + id + ')" stroke="#fff" stroke-width="3"/><path class="wv" d="M30 78q7-6 14 0t14 0t14 0" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round"/><polyline class="trend" points="32,66 44,56 56,62 70,42" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle class="dt" cx="70" cy="42" r="5" fill="#fff"/></g></svg>';
+$("navLogo").innerHTML = logo("n");
+
+async function loadGallery() {
+  const msg = $("pmsg"), box = $("pgal");
+  try {
+    let all = [], offset = 0;
+    for (;;) {
+      const r = await fetch(SB_URL + "/storage/v1/object/list/" + SB_BUCKET, {
+        method: "POST",
+        headers: {"Content-Type": "application/json", apikey: SB_KEY, Authorization: "Bearer " + SB_KEY},
+        body: JSON.stringify({prefix: "", limit: 100, offset: offset, sortBy: {column: "created_at", order: "asc"}})
+      });
+      if (!r.ok) throw new Error(r.status);
+      const part = await r.json();
+      all = all.concat(part);
+      if (part.length < 100) break;
+      offset += 100;
+    }
+    const files = all.filter(f => f.id && /\.(webp|jpe?g|png|gif|avif)$/i.test(f.name));
+    if (!files.length) { msg.textContent = "Photos will appear here soon."; return; }
+    msg.style.display = "none";
+    box.innerHTML = files.map(f => {
+      const u = SB_URL + "/storage/v1/object/public/" + SB_BUCKET + "/" + encodeURIComponent(f.name);
+      return '<a href="' + u + '"><img src="' + u + '" loading="lazy" decoding="async" alt="" onload="this.classList.add(\'ok\')" onerror="this.parentNode.remove()"></a>';
+    }).join("");
+  } catch (e) {
+    msg.textContent = "Could not load the gallery right now. Please try again later.";
+  }
+}
+loadGallery();
+
+/* lightbox */
+document.addEventListener("click", e => {
+  const im = e.target.closest(".pgal img");
+  if (im) { e.preventDefault(); $("lb").firstElementChild.src = im.src; $("lb").style.display = "flex"; }
+  else if (e.target.closest("#lb")) $("lb").style.display = "none";
+});
+addEventListener("keydown", e => { if (e.key === "Escape") $("lb").style.display = "none"; });
+</script>
+</body>
+</html>
